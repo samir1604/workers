@@ -51,7 +51,7 @@ public class AuthenticationController : ApiController
     {
         return new AuthenticationResponse(
                     result.User.Id,
-                    result.User.FirstName,
+                    result.User.FirstName.Value,
                     result.User.LastName,
                     result.User.Email,
                     result.Token

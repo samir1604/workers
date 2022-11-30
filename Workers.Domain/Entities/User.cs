@@ -1,9 +1,14 @@
+using Workers.Domain.Common.Models;
+using Workers.Domain.ValueObjects;
+
 namespace Workers.Domain.Entities;
 
-public class User
+public sealed class User : Entity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public string FirstName { get; set; } = "";
+    public User(Guid id) : base(id)  { }
+
+    public FirstName FirstName { get; set; }
+
     public string LastName {get; set;} = "";
     public string Email {get; set;} = "";
     public string Password {get; set;} = "";

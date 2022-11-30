@@ -3,6 +3,7 @@ using Workers.Application.Common.Interfaces.Authentication;
 using Workers.Application.Common.Interfaces.Repositories;
 using Workers.Domain.Common.Errors;
 using Workers.Domain.Entities;
+using Workers.Domain.ValueObjects;
 
 namespace Workers.Application.Services.Authentication;
 
@@ -38,8 +39,15 @@ public class AuthenticationService : IAuthenticationService
         if(_userRepository.GetUserByEmail(email) is not null)
             return Errors.User.DuplicateEmail;
 
-        var user = new User{
-            FirstName = firstName,
+        var name = FirstName.Create(firstName);
+        if(name.IsError)
+        {
+            return name.Errors;
+        }
+
+        var user = new User(Guid.NewGuid())
+        {
+            FirstName = name.Value,
             LastName = lastName,
             Email = email,
             Password = password
