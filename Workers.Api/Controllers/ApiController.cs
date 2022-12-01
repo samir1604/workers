@@ -7,8 +7,12 @@ using Workers.Api.Common.Constant;
 namespace Workers.Api.Controllers;
 
 [ApiController]
-public class ApiController : ControllerBase
+public abstract class ApiController<T> : ControllerBase  where T : ApiController<T>
 {
+    private ILogger<T>? _logger;
+
+    protected ILogger<T>? Logger => _logger ??= HttpContext.RequestServices.GetRequiredService<ILogger<T>>();
+
     protected IActionResult Problem(List<Error> errors)
     {
         HttpContext.Items[HttpContextKeys.ProblemErrors] = errors;
@@ -23,6 +27,8 @@ public class ApiController : ControllerBase
             _ => StatusCodes.Status500InternalServerError,
 
         };
+
+        Logger?.LogError($"Error: {statusCode}, Message: {firstError.Description}");
 
         return Problem(statusCode: statusCode, title: firstError.Description);
     }

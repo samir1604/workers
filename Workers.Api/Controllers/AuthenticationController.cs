@@ -6,7 +6,7 @@ using Workers.Domain.Common.Errors;
 namespace Workers.Api.Controllers;
 
 [Route("auth")]
-public class AuthenticationController : ApiController
+public class AuthenticationController : ApiController<AuthenticationController>
 {
     private readonly IAuthenticationService _auth;
     public AuthenticationController(IAuthenticationService auth)
@@ -22,6 +22,10 @@ public class AuthenticationController : ApiController
             request.LastName,
             request.Email,
             request.Password);
+
+        if (!result.IsError) {
+            Logger?.LogInformation($"User {result.Value.User} registered success");
+        }
 
         return result.Match(
             result => Ok(MapToResult(result)),

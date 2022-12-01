@@ -16,6 +16,5 @@ public static class Validation
             code: "User.EmptyFirstName",
             description: "Sobrepasado el maximo de caracteres"
         );
-
     }
 }
