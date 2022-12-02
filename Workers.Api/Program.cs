@@ -1,6 +1,10 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
+using Workers.Api.Common;
 using Workers.Api.Common.Errors;
 using Workers.Application;
 using Workers.Infrastructure;
@@ -11,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddControllers();
 
+    builder.Services.AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
+    builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
     builder.Services.AddSingleton<ProblemDetailsFactory, WorkersProblemDetailFactory>();
 
     builder.Services.AddEndpointsApiExplorer();
